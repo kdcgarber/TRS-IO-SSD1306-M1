@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>TRS-IO</title>
+        <link rel="stylesheet" href="normalize.css"/>
+        <link rel="stylesheet" href="main.css"/>
+    </head>
+    <body class="ptrs-mode">
+        <div class="page">
+            <header>
+                <span class="status-icons">
+                    <img id="wifi_status_icon" src="icons/wifi.svg" alt="Wi-Fi status icon">
+                    <img id="smb_share_status_icon" src="icons/smb_share.svg" alt="SMB share status icon">
+                    <img id="sd_card_status_icon" src="icons/sd_card.svg" alt="SD card status icon">
+                </span>
+                <span id="device_type">TRS-IO++</span>
+            </header>
+            <main>
+                <nav>
+                    <ul>
+                        <li><label for="dashboard_article"><img src="icons/globe.svg" alt="Dashboard" title="Dashboard"></label></li>
+                        <li class="ptrs-only"><label for="roms_article"><img src="icons/roms.svg" alt="ROMs" title="ROMs"></label></li>
+                        <li><label for="files_article"><img src="icons/files.svg" alt="Files" title="Files"></label></li>
+<!--                        <li><label for="fonts_article"><img src="icons/fonts.svg" alt="Fonts" title="Fonts"></label></li>-->
+                        <li><label for="printer_article"><img src="icons/printer.svg" alt="Printer" title="Printer"></label></li>
+<!--                        <li><label for="plotter_article"><img src="icons/plotter.svg" alt="Plotter" title="Plotter"></label></li>-->
+                        <li><label for="settings_article"><img src="icons/settings.svg" alt="Settings" title="Settings"></label></li>
+                    </ul>
+                </nav>
+                <div class="article-container">
+                    <article class="dashboard active-article">
+                        <input type="radio" name="active-article" id="dashboard_article" checked>
+                        <div class="dashboard-cards">
+                            <div class="dashboard-card">
+                                <span class="dashboard-title">Hardware</span>
+                                <ul>
+                                    <li><span class="dashboard-label">Board</span> <span id="board"></span></li>
+                                    <li class="trs-io-pp-only"><span class="dashboard-label">Configuration</span> <span id="configuration"></span></li>
+                                    <li id="fpga_vers"><span class="dashboard-label">FPGA version</span> <span id="fpga_vers_major"></span>.<span id="fpga_vers_minor"></span></li>
+                                </ul>
+                            </div>
+                            <div class="dashboard-card">
+                                <span class="dashboard-title">Software</span>
+                                <ul>
+                                    <li><span class="dashboard-label">Git commit</span> <span id="git_commit"></span></li>
+                                    <li><span class="dashboard-label">Git branch</span> <span id="git_branch"></span></li>
+                                    <li><span class="dashboard-label">TRS-IO version</span> <span id="vers_major"></span>.<span id="vers_minor"></span></li>
+                                </ul>
+                            </div>
+                            <div class="dashboard-card">
+                                <span class="dashboard-title">Time</span>
+                                <ul>
+                                    <li><span class="dashboard-label">Current time</span> <span id="time"></span></li>
+                                    <li><span class="dashboard-label">Time zone</span> <span id="time_zone"></span></li>
+                                </ul>
+                            </div>
+                            <div class="dashboard-card">
+                                <span class="dashboard-title">Network</span>
+                                <ul>
+                                    <li><span class="dashboard-label">SSID</span> <span id="wifi_ssid"></span></li>
+                                    <li><span class="dashboard-label">Status</span> <span id="wifi_status"></span></li>
+                                    <li><span class="dashboard-label">IP address</span> <span id="ip"></span></li>
+                                </ul>
+                            </div>
+                            <div class="dashboard-card">
+                                <span class="dashboard-title">Status</span>
+                                <ul>
+                                    <li><span class="dashboard-label">SMB</span> <span id="smb_err"></span></li>
+                                    <li><span class="dashboard-label">SD card</span> <span id="posix_err"></span></li>
+                                    <li><span class="dashboard-label">FreHD</span> <span id="frehd_loaded"></span></li>
+                                </ul>
+                            </div>
+                            <div class="dashboard-image">
+                                <img src="https://raw.githubusercontent.com/apuder/TRS-IO/c0b56d138824934f07bd13fe81d972a4fd37b7b5/src/esp/html/images/model_1.png" alt="Model 1" class="emulated-model-trs-80-model-1-only">
+                                <img src="https://raw.githubusercontent.com/apuder/TRS-IO/c0b56d138824934f07bd13fe81d972a4fd37b7b5/src/esp/html/images/model_3.png" alt="Model III" class="emulated-model-trs-80-model-3-only">
+                                <img src="https://raw.githubusercontent.com/apuder/TRS-IO/c0b56d138824934f07bd13fe81d972a4fd37b7b5/src/esp/html/images/model_4.png" alt="Model 4" class="emulated-model-trs-80-model-4-and-4p-only">
+                                <img src="https://raw.githubusercontent.com/apuder/TRS-IO/c0b56d138824934f07bd13fe81d972a4fd37b7b5/src/esp/html/images/hard_disk.png" alt="Hard Disk" class="emulated-model-none-only">
+                            </div>
+                        </div>
+                    </article>
+                    <article class="roms ptrs-only">
+                        <input type="radio" name="active-article" id="roms_article">
+                        <div class="button-set">
+                            <input id="uploadRomInput" type="file" accept=".rom, .bin" multiple>
+                            <label id="uploadRomButton" for="uploadRomInput" class="button small">Upload ROM</label>
+                            <button class="small" id="refreshRomsButton">Refresh</button>
+                        </div>
+                        <div class="files-list">
+                            <table class="rom-table">
+                                <thead>
+                                    <tr>
+                                        <th class="file-name">Filename</th>
+                                        <th class="file-edit"></th>
+                                        <th class="file-delete"></th>
+                                        <th class="file-size">Size</th>
+                                        <th class="file-date">Date</th>
+                                        <th class="file-select">1</th>
+                                        <th class="file-select">3</th>
+                                        <th class="file-select">4</th>
+                                        <th class="file-select">4P</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </article>
+                    <article class="files">
+                        <input type="radio" name="active-article" id="files_article">
+                        <div class="button-set">
+                            <input id="uploadFilesInput" type="file" multiple>
+                            <label id="uploadFilesButton" for="uploadFilesInput" class="button small">Upload File</label>
+                            <button class="small" id="refreshFilesButton">Refresh</button>
+                        </div>
+                        <div class="files-list">
+                            <table class="files-table">
+                                <thead>
+                                <tr>
+                                    <th class="file-name">Filename</th>
+                                    <th class="file-edit"></th>
+                                    <th class="file-download"></th>
+                                    <th class="file-delete"></th>
+                                    <th class="file-size">Size</th>
+                                    <th class="file-date">Date</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="files-error"></div>
+                    </article>
+                    <article class="printer">
+                        <input type="radio" name="active-article" id="printer_article">
+                        <div class="button-set">
+                            <button class="small" id="savePrinterButton">Save</button>
+                            <button class="small" id="clearPrinterButton">Clear</button>
+                            <div id="printerEmulationWarning">
+                                Printer emulation is currently disabled.
+                                See <a href="#">settings</a>.
+                            </div>
+                        </div>
+                        <div class="printer-output"></div>
+                    </article>
+                    <article class="settings">
+                        <input type="radio" name="active-article" id="settings_article">
+
+                        <section>
+                            <h2>General</h2>
+
+                            <div class="form-row">
+                                <label>Phosphor:</label>
+                                <div class="form-inputs">
+                                    <label class="pill"><input type="radio" name="color" value="0">White</label>
+                                    <label class="pill"><input type="radio" name="color" value="1">Green</label>
+                                    <label class="pill"><input type="radio" name="color" value="2">Amber</label>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <label for="tz">Time Zone:</label>
+                                <div class="form-inputs">
+                                    <input type="text" id="tz">
+                                    <button class="small" id="timezoneDetectButton">Detect</button>
+                                </div>
+                            </div>
+                            <div class="form-row ptrs-only">
+                                <label for="keyboard_layout">Keyboard:</label>
+                                <div class="form-inputs">
+                                    <select id="keyboard_layout">
+                                        <option>German</option>
+                                        <option>Italian</option>
+                                        <option>UK British</option>
+                                        <option selected>US English</option>
+                                        <option>Spanish</option>
+                                        <option>French</option>
+                                        <option>Belgian</option>
+                                        <option>Norwegian</option>
+                                        <option>Japanese</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <label>Printer:</label>
+                                <div class="form-inputs">
+                                    <label class="pill"><input type="radio" name="printer_en" value="0">Physical</label>
+                                    <label class="pill"><input type="radio" name="printer_en" value="1">Emulated</label>
+                                </div>
+                            </div>
+                        </section>
+
+                        <section>
+                            <h2>Wi-Fi</h2>
+
+                            <div class="form-row">
+                                <label for="ssid">Network:</label>
+                                <div class="form-inputs">
+                                    <input type="text" id="ssid">
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <label for="passwd">Password:</label>
+                                <div class="form-inputs">
+                                    <input type="text" id="passwd">
+                                </div>
+                            </div>
+                        </section>
+
+                        <section>
+                            <h2>SMB</h2>
+
+                            <div class="form-row">
+                                <label for="smb_url">URL:</label>
+                                <div class="form-inputs">
+                                    <input type="text" id="smb_url">
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <label for="smb_user">Username:</label>
+                                <div class="form-inputs">
+                                    <input type="text" id="smb_user">
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <label for="smb_passwd">Password:</label>
+                                <div class="form-inputs">
+                                    <input type="password" id="smb_passwd">
+                                </div>
+                            </div>
+                        </section>
+
+                        <div class="button-set-equal-sizes">
+                            <button id="saveSettings">Save</button>
+                            <button id="revertSettings">Revert</button>
+                        </div>
+                    </article>
+                </div>
+                <div class="right-area"></div>
+            </main>
+            <footer></footer>
+        </div>
+        <script type="module">
+            import { main } from "./main.ts";
+            main();
+        </script>
+    </body>
+</html>

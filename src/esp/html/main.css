@@ -1,0 +1,417 @@
+
+@font-face {
+    font-family: "eurostile-bold-extended";
+    src: url("fonts/eurostile-bold-extended.otf") format("opentype");
+}
+
+@font-face {
+    font-family: "souvenir-bold";
+    src: url("fonts/OPTISouvenir-Bold.otf") format("opentype");
+}
+
+:root {
+    --yellow-top: #dea80a;
+    --yellow-bottom: #dea00a;
+    --yellow: var(--yellow-top);
+    --brown: #5b3f2e; /* #675254; */
+    --brown-highlight: color-mix(in srgb, var(--brown) 95%, white);
+    --brown-select: color-mix(in srgb, var(--brown) 90%, white);
+
+    --page-small-margin: 20px;
+    --page-large-margin: 120px;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    color: var(--yellow);
+    background: var(--brown);
+    height: 100vh;
+    font-family: "Helvetica", sans-serif;
+    font-size: 20px;
+    accent-color: var(--brown);
+}
+
+a {
+    color: unset;
+}
+
+button, label.pill, .button {
+    background: var(--brown);
+    color: var(--yellow);
+    border: 0;
+    border-radius: 999px;
+    padding: 5px 25px;
+    text-transform: uppercase;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    user-select: none;
+}
+
+button.small, .button.small, label.pill {
+    font-size: 12px;
+    padding: 4px 16px 2px;
+}
+
+button:hover {
+    background: var(--brown-highlight);
+}
+
+.button-set {
+    display: flex;
+    gap: 12px;
+}
+
+.button-set-equal-sizes {
+    display: grid;
+    gap: 12px;
+    width: fit-content;
+    grid-template-columns: 1fr 1fr;
+}
+
+input, select {
+    font-family: monospace;
+    font-size: 18px;
+    background: rgb(255 255 255 / 20%);
+    border: 0;
+    color: var(--brown);
+    padding: 3px 6px;
+    outline-color: var(--brown);
+    border-radius: 3px;
+}
+
+.page {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-shrink: 0;
+    font-family: "eurostile-bold-extended", sans-serif;
+    font-size: 60px;
+    padding-inline: var(--page-large-margin) var(--page-small-margin);
+    height: var(--page-large-margin);
+}
+
+main {
+    display: flex;
+    flex-direction: row;
+    flex-grow: 1;
+}
+
+nav {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+nav ul {
+    display: flex;
+    flex-direction: column;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+
+    li label {
+        width: var(--page-large-margin);
+        height: var(--page-large-margin);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: filter 0.25s;
+        filter: opacity(30%);
+    }
+
+    li label:hover {
+        filter: opacity(50%);
+    }
+}
+
+body:not(.ptrs-mode) .ptrs-only,
+body:not([data-board-type=trs-io-pp]) .trs-io-pp-only,
+body:not([data-emulated-model=trs-80-model-1]) .emulated-model-trs-80-model-1-only,
+body:not([data-emulated-model=trs-80-model-3]) .emulated-model-trs-80-model-3-only,
+body:not([data-emulated-model=trs-80-model-4]) .emulated-model-trs-80-model-4-only,
+body:not([data-emulated-model=trs-80-model-4p]) .emulated-model-trs-80-model-4p-only,
+body:not([data-emulated-model=trs-80-model-4]):not([data-emulated-model=trs-80-model-4p]) .emulated-model-trs-80-model-4-and-4p-only,
+body:not([data-emulated-model=none]) .emulated-model-none-only {
+
+    display: none !important;
+}
+
+.status-icons {
+    display: flex;
+    gap: 13px;
+    align-items: center;
+}
+
+.status-icons img.disabled {
+    filter: opacity(30%);
+}
+
+.article-container {
+    position: relative; /* so we can absolutely position canvas */
+    z-index: 0; /* to make a new stacking context */
+
+    flex-grow: 1;
+    color: var(--brown);
+    border-radius: 30px;
+    width: 100%;
+    height: 100%;
+    padding: 3px;
+
+    /* Replaced in code: */
+    background: linear-gradient(var(--yellow-top), var(--yellow-bottom));
+}
+
+article {
+    border-radius: 27px;
+    border: 2px solid var(--brown);
+    padding: 40px;
+    height: 100%;
+}
+
+article.hover {
+    border-style: dashed;
+}
+
+article input[name=active-article] {
+    display: none;
+}
+
+article:has(input[name=active-article]:not(:checked)) {
+    display: none;
+}
+
+.page:has(#dashboard_article:checked) label[for=dashboard_article],
+.page:has(#roms_article:checked) label[for=roms_article],
+.page:has(#files_article:checked) label[for=files_article],
+.page:has(#printer_article:checked) label[for=printer_article],
+.page:has(#settings_article:checked) label[for=settings_article] {
+
+    filter: drop-shadow(0px 0px 10px var(--yellow));
+}
+
+.dashboard-label {
+    font-weight: bold;
+}
+
+.dashboard-cards {
+    --column-count: 2;
+    display: grid;
+    grid-template-columns: repeat(var(--column-count), 1fr);
+    gap: 10px;
+}
+
+@media (width < 950px) {
+    .dashboard-cards {
+        --column-count: 1;
+    }
+}
+
+.dashboard-card {
+    display: flex;
+    flex-direction: column;
+    border: 2px solid var(--brown);
+    border-radius: 20px;
+    padding: 20px;
+
+    ul {
+        list-style-type: none;
+        padding-inline-start: 0;
+        margin-bottom: 0;
+    }
+}
+
+.dashboard-title {
+    font-family: souvenir-bold, sans-serif;
+    font-size: 30px;
+}
+
+.dashboard-label {
+    font-family: souvenir-bold, sans-serif;
+    font-size: 18px;
+    margin-right: 0.5em;
+}
+
+.dashboard-image {
+    position: relative;
+
+    img {
+        width: 100%;
+        position: absolute;
+        transform: scale(120%);
+        transform-origin: top right;
+    }
+}
+
+.roms, .files {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: start;
+
+    #uploadRomInput, #uploadFilesInput {
+        display: none;
+    }
+}
+
+.files-list {
+    position: relative;
+    flex-grow: 1;
+    align-self: stretch;
+    overflow-y: scroll;
+}
+
+.files-error {
+    font-weight: bold;
+    font-size: 20px;
+    margin-top: 2em;
+}
+
+.rom-table, .files-table {
+    position: absolute;
+    inset: 0;
+    /* so that the "outline" shows, otherwise it's clipped on the left because our containers scrolls */
+    margin-left: 3px;
+
+    border-collapse: collapse;
+
+    th {
+        text-transform: uppercase;
+        font-size: 16px;
+        padding-bottom: 4px;
+    }
+
+    :is(th, td) {
+        text-align: center;
+    }
+
+    tbody:not(.renaming) td.file-name:hover,
+    tbody:not(.renaming) td.file-name:has(+ :hover) {
+        /* copy chrome */
+        outline: 1px auto rgb(0 95 204);
+    }
+
+    :is(th, td).file-name {
+        text-align: left;
+    }
+
+    :is(th, td).file-size,
+    :is(th, td).file-date {
+        text-align: right;
+    }
+
+    :is(th, td).file-select {
+        width: 1.3em;
+        box-sizing: content-box;
+    }
+
+    :is(th, td).file-edit,
+    :is(th, td).file-size,
+    :is(th, td).file-date,
+    :is(th, td):nth-child(1 of .file-select) {
+        padding-left: 1em;
+    }
+}
+
+.printer {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.printer-output {
+    background: white;
+    color: black;
+    font-family: monospace;
+    white-space: pre;
+    height: 100%;
+}
+
+.settings {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+
+    section {
+        h2 {
+            font-weight: bold;
+            font-size: 20px;
+            margin-top: 0;
+        }
+
+        .form-row {
+            display: flex;
+            align-items: baseline;
+            margin-top: 2px;
+
+            & > label {
+                min-width: 8em;
+            }
+
+            .form-inputs {
+                display: flex;
+                align-items: baseline;
+                gap: 10px;
+            }
+
+            input {
+                width: 20em;
+            }
+
+            .pill {
+                border: 1px solid var(--brown);
+            }
+
+            .pill:has(input:not(:checked)) {
+                background: transparent;
+                color: var(--brown);
+            }
+
+            input[type="radio"] {
+                display: none;
+            }
+        }
+    }
+}
+
+.right-area {
+    width: var(--page-small-margin);
+}
+
+.stars {
+    position: absolute;
+    top: 30px;
+    right: 45px;
+    color: var(--brown);
+    font-size: 20px;
+    font-family: monospace;
+    font-weight: bold;
+}
+
+.message-box {
+    position: absolute;
+    bottom: 30px;
+    right: 30px;
+    color: var(--yellow);
+    background-color: var(--brown);
+    padding: 5px 10px;
+    border-radius: 8px;
+    font-size: 20px;
+    font-weight: bold;
+    transition: bottom 300ms;
+}
+
+footer {
+    height: var(--page-small-margin);
+    flex-shrink: 0;
+}

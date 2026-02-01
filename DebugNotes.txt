@@ -1,0 +1,89 @@
+![Wireless-Keyboard](/images/trs-80MotherboardKeyBoard3.jpg?raw=true "Header")
+
+# Debug notes:
+
+Here are my notes to setup my PC to view output from the ESP-WROOM-32 usb port.
+To get it to work, I did this:
+
+To add the CP210x driver for your OS to have the USB port be used as a serial device.
+The download location I used was this: https://www.silabs.com/software-and-tools/usb-to-uart-bridge-vcp-drivers?tab=downloads
+I chose this one: CP210x Windows Drivers with Serial Enumerator
+
+After it is installed, I then use Putty to view the serial port (com4 for one of my TRS-IO boards)
+On my windows machines I use MobaXterm instead and in linux I do use just plane Putty, (Moba is a multi-window version of Putty, but Putty works quite well. https://mobaxterm.mobatek.net/download.html)
+
+When that is complete, I just plug a usb cable into the pc and my TRS-IO ESP-WROOM-32 port which will power up the board.  Then with Putty open, I can connect the serial port to the new USB port and set the speed to 115200.  It should show the boot log as  the boot progresses.
+
+
+I added additional print statement in my build so I can see the memory growth as the code runs to narrow down what is consuming the memory and causing the code to repeatedly crash and restart.
+
+
+
+
+###Loging looks like this:
+I (491) cpu_start: Multicore app
+I (491) cpu_start: Pro cpu up.
+D (491) efuse: In EFUSE_BLK0__DATA3_REG is used 3 bits starting with 9 bit
+D (494) efuse: In EFUSE_BLK0__DATA3_REG is used 1 bits starting with 2 bit
+I (501) cpu_start: Starting app cpu, entry point is 0x40081454
+I (0) cpu_start: App cpu up.
+D (516) clk: RTC_SLOW_CLK calibration value: 3287488
+I (528) cpu_start: Pro cpu start user code
+I (528) cpu_start: cpu freq: 240000000
+I (528) cpu_start: Application information:
+I (533) cpu_start: Project name:     trs-io
+I (538) cpu_start: App version:      f2acde6-dirty
+I (543) cpu_start: Compile time:     Jul  3 2025 10:10:21
+I (549) cpu_start: ELF file SHA256:  db234758f72e0945...
+I (555) cpu_start: ESP-IDF:          v4.4.7-dirty
+I (560) cpu_start: Min chip rev:     v0.0
+I (565) cpu_start: Max chip rev:     v3.99
+I (570) cpu_start: Chip rev:         v3.1
+D (575) memory_layout: Checking 7 reserved memory ranges:
+D (580) memory_layout: Reserved memory range 0x3ffae000 - 0x3ffae6e0
+D (587) memory_layout: Reserved memory range 0x3ffb0000 - 0x3ffda8d8
+D (593) memory_layout: Reserved memory range 0x3ffe0000 - 0x3ffe0440
+D (599) memory_layout: Reserved memory range 0x3ffe3f20 - 0x3ffe4350.
+.
+.
+(2313) esp_netif_lwip: call api in lwip: ret=0x0, give sem
+I (2340) wifi:<ba-add>idx:0 (ifx:0, 3c:6a:d2:82:33:ca), tid:0, ssn:0, winSize:64
+D (3314) esp_netif_lwip: esp_netif_dhcpc_cb lwip-netif:0x3ffe357c
+D (3315) esp_netif_lwip: if0x3ffe34fc ip changed=1
+D (3315) event: running post IP_EVENT:0 with handler 0x400db6e0 and context 0x3ffe34dc on loop 0x3ffe1f50
+I (3325) WIFI: Got IP: 192.168.68.35
+D (3329) event: running post IP_EVENT:0 with handler 0x4011b940 and context 0x3ffe3808 on loop 0x3ffe1f50
+D (3338) wifi_init_default: Got IP wifi default handler entered
+D (3344) esp_netif_handlers: esp_netif action got_ip with netif0x3ffe34fc from event_id=0
+I (3353) esp_netif_handlers: sta ip: 192.168.68.35, mask: 255.255.0.0, gw: 192.168.68.1
+I (3673) HTTP: Starting Mongoose
+D (3674) esp_netif_lwip: esp_netif_get_ip_info esp_netif:0x3ffe34fc
+D (3677) esp_netif_lwip: esp_netif_get_ip_info esp_netif:0x0
+D (3678) esp_netif_lwip: esp_netif_get_ip_info esp_netif:0x0
+D (3885) esp_netif_lwip: esp_netif_get_ip_info esp_netif:0x3ffe34fc
+D (4186) esp_netif_lwip: esp_netif_get_ip_info esp_netif:0x3ffe34fc
+I (4193) HTTP: request GET /status
+I (4193) HTTP: Free heap: 51668
+I (4218) wifi:<ba-add>idx:1 (ifx:0, 3c:6a:d2:82:33:ca), tid:3, ssn:0, winSize:64
+D (4485) esp_netif_lwip: esp_netif_get_ip_info esp_netif:0x3ffe34fc
+D (4785) esp_netif_lwip: esp_netif_get_ip_info esp_netif:0x3ffe34fc
+I (5025) HTTP: request GET /status
+I (5025) HTTP: Free heap: 51392
+D (5885) esp_netif_lwip: esp_netif_get_ip_info esp_netif:0x3ffe34fc
+D (6985) esp_netif_lwip: esp_netif_get_ip_info esp_netif:0x3ffe34fc
+I (7035) HTTP: request GET /status
+I (7036) HTTP: Free heap: 50328
+I (9022) HTTP: request GET /status
+I (9022) HTTP: Free heap: 50328
+I (11021) HTTP: request GET /status
+I (11021) HTTP: Free heap: 50296
+I (13015) HTTP: request GET /status
+I (13015) HTTP: Free heap: 50876
+I (15014) HTTP: request GET /status
+I (15015) HTTP: Free heap: 51444
+I (17025) HTTP: request GET /status
+I (17026) HTTP: Free heap: 51448
+I (19028) HTTP: request GET /status
+I (19028) HTTP: Free heap: 51448
+I (21032) HTTP: request GET /status
+I (21033) HTTP: Free heap: 51448
