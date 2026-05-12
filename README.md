@@ -183,7 +183,7 @@ pip --version <br>
 pip install esptool<br>
 
 ### Add a shortcut to get to the path to use the ESPTOOL
-doskey esptool="C:\Users\toddr\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.12_qbz5n2kfra8p0\LocalCache\local-packages\Python312\Scripts\esptool.exe" $*j <br>
+doskey esptool="C:\Users\toddr\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.12_qbz5n2kfra8p0\LocalCache\local-packages\Python312\Scripts\esptool.exe" $* <br>
 
 ESPTOOL should now work<br>
 
@@ -217,7 +217,7 @@ There will be 4 bin files in the directory ESP-WROOOM-32-Deployment which will b
  ### Run this command
 (Replace COM5 with your actual COM port number if necessary.) <br>
 
-esptool --chip esp32 --port COM5 --baud 460800 write-flash --flash-mode dio --flash-size detect --flash-freq 40m -z 0x1000 ESP-WROOOM-32-Deployment\bootloader.bin 0x8000 bESP-WROOOM-32-Deployment\partition-table.bin 0x10000 ESP-WROOOM-32-Deployment\trs-io.bin 0x190000 ESP-WROOOM-32-Deployment\html.bin <br>
+esptool --chip esp32 --port COM5 --baud 460800 write-flash --flash-mode dio --flash-size detect --flash-freq 40m -z 0x1000 ESP-WROOOM-32-Deployment\bootloader.bin 0x8000 ESP-WROOOM-32-Deployment\partition-table.bin 0x10000 ESP-WROOOM-32-Deployment\trs-io.bin 0x190000 ESP-WROOOM-32-Deployment\html.bin <br>
 
 
 This should flash the ESP and it will now be ready to use.<br>
