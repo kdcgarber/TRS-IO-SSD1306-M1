@@ -284,6 +284,11 @@ openFPGALoader -b tangnano9k -f TRS-IO.fs
 
 <br>
 
+
+* There is also a newer version of the TRS-IO.fs that I now use. It provides higher resolution glyphs that can be used instead of the original TRS-IO.fs file. It is called TRS-IO-v1_4-HiRes.fs and can be flashed to replace the TRS-IO.fs I used originally.  
+openFPGALoader -b tangnano9k -f TRS-IO-v1_4-HiRes.fs
+
+
 ## All done with the Install
 
 After the install is complete, follow the notes on the TRS-IO site to bring up the trs-io.local access point<br> 
